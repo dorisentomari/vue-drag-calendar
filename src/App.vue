@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h3>vue-drag-calendar</h3>
-    <Calendar></Calendar>
+    <Calendar class="calendar"></Calendar>
   </div>
 </template>
 
@@ -17,9 +17,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  #app {
+    background: #ccc;
+  }
   h3 {
     text-align: center;
     font-size: 28px;
     padding: 1rem 0;
   }
+  
+  .calendar {
+    width: 1000px;
+    margin: 0 auto;
+  }
+  
 </style>

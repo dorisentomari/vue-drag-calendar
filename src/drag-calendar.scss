@@ -1,3 +1,5 @@
+$gray-border: #cbcbcb;
+
 .drag-calendar {
   .calendar-header {
     display: flex;
@@ -13,7 +15,27 @@
       display: flex;
       align-items: center;
     }
-
-
   }
+
+  .calendar-body {
+    margin-top: 1rem;
+
+    .weeks {
+      display: flex;
+      border: 1px solid $gray-border;
+      border-right: none;
+      background: #e0e0e0;
+      height: 2rem;
+
+      .week {
+        flex: 1;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        border-right: 1px solid $gray-border;
+      }
+    }
+  }
+
 }

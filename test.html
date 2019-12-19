@@ -7,8 +7,49 @@
 </head>
 <body>
 <script>
-   let res =  moment('2019-12')
-   console.log(res);
+    const formatDate = (date, flag = true) => {
+        let invalidDate = new Date('xxxx').toString();
+        let newDate = new Date(date);
+        if (newDate.toString() === invalidDate) {
+            throw new Error(`时间 ${date} 不符合要求`);
+        } else {
+            if (flag) {
+                return moment(newDate).format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                return moment(newDate).format('YYYY-MM-DD');
+            }
+        }
+    };
+	
+	
+    let dateFunc = {
+        getMonthViewStartDate(date, firstDay) {
+            firstDay = parseInt(firstDay);
+            let start = moment(date);
+            let startOfMonth = moment(start.startOf('month'));
+
+            start.subtract(startOfMonth.day(), 'days');
+
+            if (startOfMonth.day() < firstDay) {
+                start.subtract(7, 'days');
+            }
+
+            start.add(firstDay, 'days');
+
+            return start;
+        },
+        getMonthViewEndDate(date) {
+            return this.getMonthViewStartDate().add(6, 'weeks');
+        }
+    };
+
+		let currentMonth = moment('2019-12');
+		let firstDayOfMonth = moment('2019-12-01');
+		let firstDay = 1;
+		let start = dateFunc.getMonthViewEndDate(currentMonth, firstDay);
+    let end = dateFunc.getMonthViewEndDate(firstDayOfMonth, firstDay);
+    console.log(formatDate(start, false));
+    console.log(formatDate(end, false));
 </script>
 </body>
 </html>

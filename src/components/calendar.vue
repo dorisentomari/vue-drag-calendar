@@ -4,6 +4,7 @@
       @change-month="changeMonth"
       @change-year="changeYear"
       :current-month="currentMonth"
+      :week-first-day="weekFirstDay"
     >
       <div class="header-left">
         <slot name="header-left"></slot>
@@ -18,7 +19,13 @@
       </div>
     
     </CalendarHeader>
-    <CalendarBody></CalendarBody>
+    
+    <CalendarBody
+      :current-month="currentMonth"
+      :week-first-day="weekFirstDay"
+    >
+    
+    </CalendarBody>
     <More></More>
   </div>
 </template>
@@ -41,8 +48,12 @@
       }
     },
     data() {
+      const d = '2019-10-01';
+      console.log(d);
       return {
-        currentMonth: formatDate(new Date(), this.$constant.FORMAT_YEAR_MONTH)
+        currentMonth: formatDate(new Date(d), this.$constant.FORMAT_YEAR_MONTH),
+        // 每周第一天是周日还是周一， 0 代表周日， 1 代表周一
+        weekFirstDay: 1
       };
     },
     components: {

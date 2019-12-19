@@ -52,6 +52,10 @@ export default {
 	  currentMonth: {
 	    type: String,
       default: formatDate(new Date(), constant.FORMAT_YEAR_MONTH)
+    },
+    weekFirstDay: {
+	    type: Number,
+      default: 1
     }
   },
   methods: {

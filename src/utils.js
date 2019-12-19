@@ -2,8 +2,10 @@ import momemt from 'moment';
 
 import constant from './constant';
 
+const {INVALID_DATE, FORMAT_YEAR, FORMAT_YEAR_MONTH, FORMAT_YEAR_MONTH_DATE} = constant;
+
 export const formatDate = (time, format) => {
-  const {INVALID_DATE, FORMAT_YEAR, FORMAT_YEAR_MONTH, FORMAT_YEAR_MONTH_DATE} = constant;
+
   if (new Date(time).toString() === INVALID_DATE) {
     time = new Date();
   }
@@ -20,6 +22,3 @@ export const formatDate = (time, format) => {
       return momemt(time).format(FORMAT_YEAR_MONTH_DATE);
   }
 };
-
-
-

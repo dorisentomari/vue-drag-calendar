@@ -1,0 +1,19 @@
+.drag-calendar {
+  .calendar-header {
+    display: flex;
+    justify-content: center;
+    background: orange;
+
+    .title {
+      font-size: 22px;
+      padding-right: 1rem;
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+    }
+
+
+  }
+}

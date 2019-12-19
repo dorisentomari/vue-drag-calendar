@@ -1,4 +1,6 @@
 $gray-border: #cbcbcb;
+$gray-light: #b3b3b3;
+$white: #fff;
 
 .drag-calendar {
   .calendar-header {
@@ -30,12 +32,48 @@ $gray-border: #cbcbcb;
       .week {
         flex: 1;
         display: flex;
-        text-align: center;
         justify-content: center;
         align-items: center;
         border-right: 1px solid $gray-border;
       }
     }
+
+    .dates {
+      .dates-bg {
+
+        .weeks-row {
+          display: flex;
+        }
+
+        .day-cell {
+          flex: 1;
+          border: 1px solid $gray-border;
+          min-height: 100px;
+          background: $white;
+        }
+
+        .today {
+          color: red;
+        }
+
+        .not-current-month {
+          color: $gray-light;
+        }
+
+        .current-month {
+
+        }
+
+        .next-month {
+
+        }
+        .previous-month {
+
+        }
+
+      }
+    }
+
   }
 
 }

@@ -1,19 +1,8 @@
 # vue-drag-calendar
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# TODO
++ 多语言，中文/英文，不做其他的语言
++ 每周的第一天是周日还是周一
++ 日历中每天的业务数据列表
++ 业务数据的拖拽功能
++ 切换年月更新视图的数据

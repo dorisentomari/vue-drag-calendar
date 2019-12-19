@@ -38,22 +38,21 @@
   import More from './more';
   
   import {formatDate} from '../utils';
+  import constant from '../constant';
   
   export default {
     name: 'calendar',
     props: {
       locale: {
         type: String,
-        default: 'zh-CN'
+        default: constant.LOCALE.CN
       }
     },
     data() {
-      const d = '2019-10-01';
-      console.log(d);
       return {
-        currentMonth: formatDate(new Date(d), this.$constant.FORMAT_YEAR_MONTH),
+        currentMonth: formatDate(new Date(), this.$constant.FORMAT_YEAR_MONTH),
         // 每周第一天是周日还是周一， 0 代表周日， 1 代表周一
-        weekFirstDay: 1
+        weekFirstDay: constant.WEEK_FIRST_DAY.SUNDAY
       };
     },
     components: {
@@ -75,7 +74,6 @@
         } else {
           this.currentMonth = formatDate(currentDate.add(value, 'month'), this.$constant.FORMAT_YEAR_MONTH);
         }
-        console.log(this.currentMonth);
       }
     }
   };

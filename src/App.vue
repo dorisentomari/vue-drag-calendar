@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <h3>vue-drag-calendar</h3>
-    <Calendar class="calendar"></Calendar>
+    <Calendar class="calendar"
+              :locale="locale"
+    ></Calendar>
   </div>
 </template>
 
@@ -12,6 +14,13 @@ export default {
   name: 'app',
   components: {
     Calendar
+  },
+  data () {
+    return {
+      locale: this.$constant.LOCALE.CN
+    };
+  },
+  created () {
   }
 }
 </script>

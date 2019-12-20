@@ -1,59 +1,48 @@
-$gray-border: #cbcbcb;
-$gray-light: #b3b3b3;
-$white: #fff;
-$black: #000;
-$blue: #2d8cf0;
-$blue-light: #e6f7ff;
+// 纯色
+$white-color: #ffffff;
+$black-color: #000000;
+$red-color: #ff0000;
+$green-color: #00ff00;
+$blue-color: #0000ff;
 
-$success: #52c41a;
-$warning: #faad14;
-$error: #f5222d;
-$default: $gray-light;
+// 主色调 蓝色
+$blue-primary-color: #2d8cf0;
+$blue-info-color: #2db7f5;
+$blue-light-color: #e6f7ff;
+$body-background: $white-color;
 
+// 辅助色（配色）
+$gray-light-color: #cbcbcb;
+$gray-color: #999999;
+$gray-dark-color: #333333;
+$subsidiary-color: #808695;
 
-$primary-color          : #2d8cf0;
-$info-color             : #2db7f5;
-$success-color          : #19be6b;
-$processing-color       : $primary-color;
-$warning-color          : #ff9900;
-$error-color            : #ed4014;
-$normal-color           : #e6ebf1;
-$link-color             : #2D8cF0;
-$link-hover-color       : tint($link-color, 20%);
-$link-active-color      : shade($link-color, 5%);
-$selected-color         : fade($primary-color, 90%);
-$tooltip-color          : #fff;
-$subsidiary-color       : #808695;
-$rate-star-color        : #f5a623;
-$white: #fff;
-$black: #000;
+// 对象状态
+$success-color: #19be6b;
+$warning-color: #ff9900;
+$error-color: #f5222d;
+$default-color: $gray-light-color;
 
-$body-background: #fff;
-$component-background: #fff;
-$text-color: fade($black, 65%);
-$text-color-secondary: fade($black, 45%);
-$text-color-inverse: $white;
-$icon-color-hover: fade($black, 75%);
-$heading-color: fade(#000, 85%);
-$heading-color-dark: fade($white, 100%);
-$text-color-dark: fade($white, 85%);
-$text-color-secondary-dark: fade($white, 65%);
-$text-selection-bg: $primary-color;
+// 超链接
+$link-color: #2D8cF0;
+$link-hover-color: tint($link-color, 20%);
+$link-active-color: shade($link-color, 5%);
 
+// 文本
 
-
-
+// 边框
+$border-primary-color: $blue-info-color;
 
 .common-border {
-  border: 1px solid $gray-border;
+  border: 1px solid $gray-color;
   border-right: none;
   border-bottom: none;
 }
 
 .drag-calendar {
   padding-top: 1rem;
-  border: 1px solid $gray-light;
-  background-color: $white;
+  border: 1px solid $gray-light-color;
+  background-color: $white-color;
 
   button {
     text-align: center;
@@ -62,9 +51,9 @@ $text-selection-bg: $primary-color;
     height: 32px;
     padding: 0 15px;
     font-size: 14px;
-    border: 1px solid $gray-light;
+    border: 1px solid $gray-light-color;
     transition: color .2s linear, background-color .2s linear, border .2s linear, box-shadow .2s linear;
-    color: $black;
+    color: $black-color;
     background-color: #fff;
     outline: none;
   }
@@ -74,7 +63,7 @@ $text-selection-bg: $primary-color;
 
     button {
       &:hover {
-        background-color: $blue-light;
+        background-color: $blue-light-color;
       }
 
       &:first-child {
@@ -110,15 +99,14 @@ $text-selection-bg: $primary-color;
     .weeks {
       display: flex;
       height: 2rem;
-      $extend .common-border;
-      &:extend(.common-border);
+      @extend .common-border;
 
       .week {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        border-right: 1px solid $gray-border;
+        border-right: 1px solid $gray-light-color;
 
         &:last-child {
           border-right: none;
@@ -136,12 +124,11 @@ $text-selection-bg: $primary-color;
         .day-cell {
           flex: 1;
           min-height: 10rem;
-          background: $white;
-          $extend .common-border;
-          &:extend(.common-border);
+          background: $white-color;
+          @extend .common-border;
 
           &:hover {
-            background: $blue-light;
+            background: $blue-light-color;
             transition: background-color ease 200ms;
           }
 
@@ -162,11 +149,11 @@ $text-selection-bg: $primary-color;
 
         .today {
           color: red;
-          background: $blue-light;
+          background: $blue-light-color;
         }
 
         .not-current-month {
-          color: $gray-light;
+          color: $gray-light-color;
         }
 
         .current-month {
@@ -190,10 +177,10 @@ $text-selection-bg: $primary-color;
           border: 1px solid transparent;
           line-height: 1.5;
           cursor: pointer;
-          color: $black;
+          color: $gray-dark-color;
 
           &:hover {
-            color: $blue;
+            color: $blue-primary-color;
           }
 
           .badge {
@@ -206,19 +193,19 @@ $text-selection-bg: $primary-color;
             border-radius: 50%;
 
             &.success {
-              background-color: $success;
+              background-color: $success-color;
             }
 
             &.warning {
-              background-color: $warning;
+              background-color: $warning-color;
             }
 
             &.error {
-              background-color: $error;
+              background-color: $error-color;
             }
 
             &.default {
-              background-color: $default;
+              background-color: $default-color;
             }
 
           }

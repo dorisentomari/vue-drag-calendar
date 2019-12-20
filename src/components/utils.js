@@ -29,7 +29,7 @@ export const getCurrentMonth = date => {
   return [currentDate, newDate];
 };
 
-export const isCurrentMonth = date => {
+export const isCurrentMonth = (date) => {
   let [currentDate, newDate] = getCurrentMonth(date);
   return currentDate === newDate;
 };

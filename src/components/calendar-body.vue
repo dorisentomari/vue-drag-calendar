@@ -18,7 +18,6 @@
         >
           <div class="day-cell"
                v-for="(day, i) in week"
-               @click="dayClick(day, i)"
                :key="i"
                :class="{
                   today: day.isToday,
@@ -29,6 +28,11 @@
                   selected: day.isSelected
                  }
                "
+               @click="onClickDay(day, i)"
+               @drop.prevent="onDrop(day, $event)"
+               @dropover.prevent="onDropOver(day, $event)"
+               @dropenter.prevent="onDropEnter(day, $event)"
+               @dropleave.prevent="onDropLeave(day, $event)"
           >
             <div class="day-number">
               <span>{{day.dayNumber}}</span>
@@ -36,6 +40,7 @@
             <div class="events">
                <span v-for="(event, idx) in day.events"
                      class="event"
+                     :draggable="enableDragDrop"
                      :key="event.id || idx"
                >
                  <span class="badge"
@@ -54,8 +59,8 @@
 
 <script>
   import moment from 'moment';
-  import constant from '../constant';
-  import {formatDate, isCurrentMonth, isPreviousMonth, isNextMonth, isToday} from "../utils";
+  import constant from './constant';
+  import {formatDate, isCurrentMonth, isPreviousMonth, isNextMonth, isToday} from "./utils";
   
   export default {
     name: 'calendar-body',
@@ -90,7 +95,11 @@
       events: {
         type: Array,
         default: () => ([])
-      }
+      },
+      enableDragDrop: {
+        type: Boolean,
+        default: false
+      },
     },
     computed: {
       currentDaysList() {
@@ -147,22 +156,35 @@
       getMonthViewDaysRange() {
         let date = moment(this.$props.currentMonth);
         let startDiffDays = this.getMonthViewStartDiffDays(date);
-        let firstDay = formatDate(date.add(-startDiffDays, 'days'), this.$constant.FORMAT_YEAR_MONTH_DATE);
+        let firstDay = formatDate(date.add(-startDiffDays, 'days'),constant.FORMAT_YEAR_MONTH_DATE);
         let daysRange = [];
         for (let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
-          daysRange.push(formatDate(moment(firstDay).add(i, 'days'), this.$constant.FORMAT_YEAR_MONTH_DATE));
+          daysRange.push(formatDate(moment(firstDay).add(i, 'days'),constant.FORMAT_YEAR_MONTH_DATE));
         }
         return daysRange;
       },
-      dayClick (day, i) {
-        day.isSelected = true;
-        this.$emit('on-day-click', day);
-      }
+      onClickDay (day, i) {
+        this.$emit('click-day', day);
+      },
+      handleDragEvent() {
+        return this.$props.enableDragDrop;
+      },
+      onDrop(day, $event) {
+        this.handleDragEvent();
+      },
+      onDropOver(day, $event) {
+      
+      },
+      onDropEnter(day, $event) {
+      
+      },
+      onDropLeave(day, $event) {
+      
+      },
     },
     created() {
       this.getMonthViewDaysRange();
-      let locale = this.$props.locale;
-      let weekFirstDay = this.$props.weekFirstDay;
+      let { locale, weekFirstDay } = this.$props;
       switch (weekFirstDay) {
         case constant.WEEK_FIRST_DAY.MONDAY:
           this.weekListMap.push(this.weekSunday);
@@ -178,7 +200,3 @@
     }
   };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

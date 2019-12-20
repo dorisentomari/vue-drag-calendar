@@ -3,6 +3,7 @@
     <h3>vue-drag-calendar</h3>
     <Calendar class="calendar"
               :locale="locale"
+              :enable-drag-drop="enableDragDrop"
               :events="events"
     >
     </Calendar>
@@ -11,6 +12,7 @@
 
 <script>
 import Calendar from './components/calendar';
+import constant from './components/constant';
 
 export default {
   name: 'app',
@@ -19,8 +21,9 @@ export default {
   },
   data () {
     return {
-      locale: this.$constant.LOCALE.CN,
-      everyDayMaxNumber: this.$constant.EVERY_DAY_MAX_NUMBER,
+      locale: constant.LOCALE.CN,
+      everyDayMaxNumber: constant.EVERY_DAY_MAX_NUMBER,
+      enableDragDrop: true,
       events: [
         { id: 5, name: '测试05', date: '2019-12-04', startTime: '15:30', endTime: '18:00', status: 'success' },
         { id: 7, name: '测试05', date: '2019-12-04', startTime: '15:30', endTime: '18:00', status: 'error' },
@@ -34,7 +37,11 @@ export default {
         { id: 3, name: '测试03', date: '2019-12-18', startTime: '15:30', endTime: '18:00', status: 'error' },
         { id: 1, name: '测试01', date: '2019-12-19', startTime: '15:30', endTime: '18:00', status: 'success' },
         { id: 2, name: '测试02', date: '2019-12-20', startTime: '15:30', endTime: '18:00', status: 'error' },
-        { id: 4, name: '测试04', date: '2019-12-28', startTime: '15:30', endTime: '18:00', status: 'error' },
+        { id: 4, name: '测试04', date: '2019-11-28', startTime: '15:30', endTime: '18:00', status: 'error' },
+        { id: 14, name: '测试04', date: '2019-11-08', startTime: '15:30', endTime: '18:00', status: 'error' },
+        { id: 15, name: '测试04', date: '2019-11-24', startTime: '15:30', endTime: '18:00', status: 'error' },
+        { id: 16, name: '测试04', date: '2019-11-12', startTime: '15:30', endTime: '18:00', status: 'error' },
+        { id: 17, name: '测试04', date: '2019-10-11', startTime: '15:30', endTime: '18:00', status: 'error' },
       ]
     };
   },
@@ -45,7 +52,8 @@ export default {
 
 <style lang="scss" scoped>
   #app {
-    background: #ccc;
+    background: #fff;
+    height: 2000px;
   }
   h3 {
     text-align: center;

@@ -4,8 +4,26 @@
 	<meta charset="UTF-8">
 	<title>Title</title>
 	<script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
+	<style>
+		.badge {
+			color: red;
+			position: relative;
+			top: -1px;
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			vertical-align: middle;
+			border-radius: 50%;
+			background-color: #52c41a;
+		}
+	</style>
 </head>
 <body>
+
+<div>
+	<p>icon <span class="badge"></span></p>
+</div>
+
 <script>
     const formatDate = (date, flag = true) => {
         let invalidDate = new Date('xxxx').toString();
@@ -20,8 +38,7 @@
             }
         }
     };
-	
-	
+
     let dateFunc = {
         getMonthViewStartDate(date, firstDay) {
             firstDay = parseInt(firstDay);
@@ -43,13 +60,33 @@
         }
     };
 
-		let currentMonth = moment('2019-12');
-		let firstDayOfMonth = moment('2019-12-01');
-		let firstDay = 1;
-		let start = dateFunc.getMonthViewEndDate(currentMonth, firstDay);
+    let currentMonth = moment('2019-12');
+    let firstDayOfMonth = moment('2019-12-01');
+    let firstDay = 1;
+    let start = dateFunc.getMonthViewEndDate(currentMonth, firstDay);
     let end = dateFunc.getMonthViewEndDate(firstDayOfMonth, firstDay);
-    console.log(formatDate(start, false));
-    console.log(formatDate(end, false));
+    // console.log(formatDate(start, false));
+    // console.log(formatDate(end, false));
+
+    let events = [
+        {id: 5, label: '测试07', date: '2019-12-04', startTime: '08:30', endTime: '11:00'},
+        {id: 5, label: '测试05', date: '2019-12-04', startTime: '15:30', endTime: '18:00'},
+        {id: 6, label: '测试06', date: '2019-12-07', startTime: '15:30', endTime: '18:00'},
+        {id: 3, label: '测试03', date: '2019-12-18', startTime: '15:30', endTime: '18:00'},
+        {id: 1, label: '测试01', date: '2019-12-19', startTime: '15:30', endTime: '18:00'},
+        {id: 2, label: '测试02', date: '2019-12-20', startTime: '15:30', endTime: '18:00'},
+        {id: 4, label: '测试04', date: '2019-12-28', startTime: '15:30', endTime: '18:00'},
+    ];
+
+    let eventsDateKeys = events.map(event => event.date);
+    console.log(eventsDateKeys);
+    let res = {};
+    eventsDateKeys.forEach(date => {
+        res[date] = events.filter(event => event.date === date);
+    });
+    console.log(res);
+
+
 </script>
 </body>
 </html>

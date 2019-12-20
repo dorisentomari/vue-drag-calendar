@@ -18,18 +18,31 @@
         >
           <div class="day-cell"
                v-for="(day, i) in week"
+               @click="dayClick(day, i)"
                :key="i"
                :class="{
                   today: day.isToday,
                   'current-month': day.isCurrentMonth,
                   'not-current-month': !day.isCurrentMonth,
                   'next-month': day.isNextMonth,
-                  'previous-month': day.isPreviousMonth
+                  'previous-month': day.isPreviousMonth,
+                  selected: day.isSelected
                  }
                "
           >
-            <span class="day-number">{{day.monthDay}}</span>
-          
+            <div class="day-number">
+              <span>{{day.dayNumber}}</span>
+            </div>
+            <div class="events">
+               <span v-for="(event, idx) in day.events"
+                     class="event"
+                     :key="event.id || idx"
+               >
+                 <span class="badge"
+                       :class="[event.status ? event.status : 'default']"></span>
+                {{event.name}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -43,7 +56,6 @@
   import moment from 'moment';
   import constant from '../constant';
   import {formatDate, isCurrentMonth, isPreviousMonth, isNextMonth, isToday} from "../utils";
-  
   
   export default {
     name: 'calendar-body',
@@ -74,6 +86,10 @@
       locale: {
         type: String,
         default: constant.LOCALE.CN
+      },
+      events: {
+        type: Array,
+        default: () => ([])
       }
     },
     computed: {
@@ -95,14 +111,24 @@
       currentDayEvents() {
         let list = [];
         let _day = {};
+        const events = this.$props.events;
+        let eventsDateKeys = events.map(event => event.date);
+        console.log(eventsDateKeys);
+        let res = {};
+        eventsDateKeys.forEach(date => {
+          res[date] = events.filter(event => event.date === date);
+        });
         this.currentWeekDaysList.forEach(weeks => {
           let w = [];
           weeks.forEach(day => {
             _day.isToday = isToday(day);
             _day.isCurrentMonth = isCurrentMonth(day);
-            _day.monthDay = day;
+            _day.date = day;
+            _day.dayNumber = day.substring(day.length - 2);
             _day.isPreviousMonth = isPreviousMonth(day);
             _day.isNextMonth = isNextMonth(day);
+            _day.isSelected = false;
+            _day.events = events.filter(event => event.date === day);
             w.push(_day);
             _day = {};
           });
@@ -127,6 +153,10 @@
           daysRange.push(formatDate(moment(firstDay).add(i, 'days'), this.$constant.FORMAT_YEAR_MONTH_DATE));
         }
         return daysRange;
+      },
+      dayClick (day, i) {
+        day.isSelected = true;
+        this.$emit('on-day-click', day);
       }
     },
     created() {

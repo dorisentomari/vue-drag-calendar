@@ -23,8 +23,9 @@
     <CalendarBody
       :current-month="currentMonth"
       :week-first-day="weekFirstDay"
+      :events="events"
     >
-    
+      <slot name="events"></slot>
     </CalendarBody>
     <More></More>
   </div>
@@ -46,6 +47,10 @@
       locale: {
         type: String,
         default: constant.LOCALE.CN
+      },
+      events: {
+        type: Array,
+        default: () => ([])
       }
     },
     data() {

@@ -1,6 +1,14 @@
 $gray-border: #cbcbcb;
 $gray-light: #b3b3b3;
 $white: #fff;
+$black: #000;
+$blue: #2d8cf0;
+$blue-light: #e6f7ff;
+
+$success: #52c41a;
+$warning: #faad14;
+$error: #f5222d;
+$default: $gray-light;
 
 .drag-calendar {
   .calendar-header {
@@ -48,12 +56,32 @@ $white: #fff;
         .day-cell {
           flex: 1;
           border: 1px solid $gray-border;
-          min-height: 100px;
+          min-height: 10rem;
           background: $white;
+
+          &:hover {
+            background: $blue-light;
+            transition: background-color ease 200ms;
+          }
+
+          &.isSelected {
+            background: $blue-light;
+          }
+
+          .day-number {
+            text-align: right;
+            padding-right: 5px;
+            padding-top: 5px;
+
+            span {
+              font-size: 18px;
+            }
+          }
         }
 
         .today {
           color: red;
+          background: $blue-light;
         }
 
         .not-current-month {
@@ -67,8 +95,52 @@ $white: #fff;
         .next-month {
 
         }
+
         .previous-month {
 
+        }
+
+        .event {
+          display: block;
+          vertical-align: middle;
+          margin: 4px;
+          padding-left: 2px;
+          border-radius: 4px;
+          border: 1px solid transparent;
+          line-height: 1.5;
+          cursor: pointer;
+          color: $black;
+
+          &:hover {
+            color: $blue;
+          }
+
+          .badge {
+            position: relative;
+            top: -1px;
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            vertical-align: middle;
+            border-radius: 50%;
+
+            &.success {
+              background-color: $success;
+            }
+
+            &.warning {
+              background-color: $warning;
+            }
+
+            &.error {
+              background-color: $error;
+            }
+
+            &.default {
+              background-color: $default;
+            }
+
+          }
         }
 
       }

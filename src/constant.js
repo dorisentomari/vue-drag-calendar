@@ -12,5 +12,12 @@ export default  {
   WEEK_FIRST_DAY: {
     SUNDAY: 0,
     MONDAY: 1
+  },
+  EVERY_DAY_MAX_NUMBER: 3,
+  EVENT_STATUS: {
+    SUCCESS: 'SUCCESS',
+    WARNING: 'WARNING',
+    ERROR: 'ERROR',
+    DEFAULT: 'DEFAULT'
   }
 };

@@ -2,6 +2,11 @@
   "name": "vue-drag-calendar",
   "version": "0.1.0",
   "private": true,
+  "author": "dawnight",
+  "repository": {
+    "type": "public",
+    "url": "https://github.com/dawnight/vue-drag-calendar.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
@@ -9,7 +14,6 @@
   "dependencies": {
     "core-js": "^3.4.3",
     "moment": "^2.24.0",
-    "view-design": "^4.0.2",
     "vue": "^2.6.10"
   },
   "devDependencies": {

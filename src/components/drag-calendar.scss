@@ -10,6 +10,40 @@ $warning: #faad14;
 $error: #f5222d;
 $default: $gray-light;
 
+
+$primary-color          : #2d8cf0;
+$info-color             : #2db7f5;
+$success-color          : #19be6b;
+$processing-color       : $primary-color;
+$warning-color          : #ff9900;
+$error-color            : #ed4014;
+$normal-color           : #e6ebf1;
+$link-color             : #2D8cF0;
+$link-hover-color       : tint($link-color, 20%);
+$link-active-color      : shade($link-color, 5%);
+$selected-color         : fade($primary-color, 90%);
+$tooltip-color          : #fff;
+$subsidiary-color       : #808695;
+$rate-star-color        : #f5a623;
+$white: #fff;
+$black: #000;
+
+$body-background: #fff;
+$component-background: #fff;
+$text-color: fade($black, 65%);
+$text-color-secondary: fade($black, 45%);
+$text-color-inverse: $white;
+$icon-color-hover: fade($black, 75%);
+$heading-color: fade(#000, 85%);
+$heading-color-dark: fade($white, 100%);
+$text-color-dark: fade($white, 85%);
+$text-color-secondary-dark: fade($white, 65%);
+$text-selection-bg: $primary-color;
+
+
+
+
+
 .common-border {
   border: 1px solid $gray-border;
   border-right: none;
@@ -76,7 +110,8 @@ $default: $gray-light;
     .weeks {
       display: flex;
       height: 2rem;
-      @extend .common-border;
+      $extend .common-border;
+      &:extend(.common-border);
 
       .week {
         flex: 1;
@@ -102,7 +137,8 @@ $default: $gray-light;
           flex: 1;
           min-height: 10rem;
           background: $white;
-          @extend .common-border;
+          $extend .common-border;
+          &:extend(.common-border);
 
           &:hover {
             background: $blue-light;

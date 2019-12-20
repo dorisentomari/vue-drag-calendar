@@ -36,6 +36,7 @@
 <script>
   import constant from './constant';
   import {formatDate} from "./utils";
+  
   const keepCurrentMonth = formatDate(new Date(), constant.FORMAT_YEAR_MONTH);
   
   export default {

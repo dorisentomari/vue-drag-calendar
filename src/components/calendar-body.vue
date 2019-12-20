@@ -69,7 +69,7 @@
 <script>
   import moment from 'moment';
   import constant from './constant';
-  import {formatDate, isCurrentMonth, isPreviousMonth, isNextMonth, isToday} from "./utils";
+  import {formatDate, isCurrentMonth, isPreviousMonth, isNextMonth, isToday} from './utils';
   
   export default {
     name: 'calendar-body',
@@ -85,9 +85,10 @@
           {id: 'FRIDAY', value: 5, EN: 'FRIDAY', CN: '星期五'},
           {id: 'SATURDAY', value: 6, EN: 'SATURDAY', CN: '星期六'},
         ],
+        ONE_WEEK_DAYS: 7,
         MONTH_VIEW_ALL_DAYS: 6 * 7,
         showMoreTitle: '',
-        showMore: {
+        showMoreMap: {
           EN: 'show more',
           CN: '查看更多'
         }
@@ -127,7 +128,7 @@
         let list = [];
         let weeks = [];
         for (let i = 0; i <= this.MONTH_VIEW_ALL_DAYS; i++) {
-          if (i !== 0 && i % 7 === 0) {
+          if (i !== 0 && i % this.ONE_WEEK_DAYS === 0) {
             list.push(weeks);
             weeks = [];
           }
@@ -168,16 +169,16 @@
     methods: {
       getMonthViewStartDiffDays(date) {
         let monthFirstDayWeek = date.day();
-        monthFirstDayWeek = monthFirstDayWeek === 0 ? 7 : monthFirstDayWeek;
+        monthFirstDayWeek = monthFirstDayWeek === 0 ? this.ONE_WEEK_DAYS : monthFirstDayWeek;
         return monthFirstDayWeek - this.$props.weekFirstDay;
       },
       getMonthViewDaysRange() {
         let date = moment(this.$props.currentMonth);
         let startDiffDays = this.getMonthViewStartDiffDays(date);
-        let firstDay = formatDate(date.add(-startDiffDays, 'days'), constant.FORMAT_YEAR_MONTH_DATE);
+        let firstDay = formatDate(date.add(-startDiffDays, constant.MOMENT.DAYS), constant.FORMAT_YEAR_MONTH_DATE);
         let daysRange = [];
         for (let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
-          daysRange.push(formatDate(moment(firstDay).add(i, 'days'), constant.FORMAT_YEAR_MONTH_DATE));
+          daysRange.push(formatDate(moment(firstDay).add(i, constant.MOMENT.DAYS), constant.FORMAT_YEAR_MONTH_DATE));
         }
         return daysRange;
       },
@@ -220,7 +221,7 @@
           break;
       }
       this.weekList = this.weekListMap.map(day => day[locale]);
-      this.showMoreTitle = this.showMore[locale];
+      this.showMoreTitle = this.showMoreMap[locale];
     }
   };
 </script>

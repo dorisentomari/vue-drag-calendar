@@ -19,5 +19,10 @@ export default  {
     WARNING: 'WARNING',
     ERROR: 'ERROR',
     DEFAULT: 'DEFAULT'
+  },
+  MOMENT: {
+    DAYS: 'days',
+    MONTHS: 'months',
+    YEARS: 'years'
   }
 };

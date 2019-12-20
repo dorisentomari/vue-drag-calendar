@@ -36,12 +36,13 @@
 
 <script>
   import moment from 'moment';
+  import constant from './constant';
+  import './drag-calendar.scss';
   
   import CalendarHeader from './calendar-header';
   import CalendarBody from './calendar-body';
   
   import {formatDate} from './utils';
-  import constant from './constant';
   
   const currentMonth = formatDate(new Date(), constant.FORMAT_YEAR_MONTH);
   
@@ -82,12 +83,12 @@
       changeYear(value) {
         this.changeToTargetMonth(value, true);
       },
-      changeToTargetMonth (value, flag) {
+      changeToTargetMonth (value, isYear) {
         let currentDate = moment(this.currentMonth);
-        if (flag) {
-          this.currentMonth = formatDate(currentDate.add(value, 'year'),constant.FORMAT_YEAR_MONTH);
+        if (isYear) {
+          this.currentMonth = formatDate(currentDate.add(value, constant.MOMENT.YEARS),constant.FORMAT_YEAR_MONTH);
         } else {
-          this.currentMonth = formatDate(currentDate.add(value, 'month'),constant.FORMAT_YEAR_MONTH);
+          this.currentMonth = formatDate(currentDate.add(value, constant.MOMENT.MONTHS),constant.FORMAT_YEAR_MONTH);
         }
       },
       changeCurrentMonth () {
@@ -96,208 +97,6 @@
       onClickDay (...args) {
         this.$emit('click-day', ...args);
       }
-    },
-    created () {
-      console.log('calendar component ', this.$props.locale);
     }
   };
 </script>
-
-<style lang="scss">
-  $gray-border: #cbcbcb;
-  $gray-light: #b3b3b3;
-  $white: #fff;
-  $black: #000;
-  $blue: #2d8cf0;
-  $blue-light: #e6f7ff;
-  
-  $success: #52c41a;
-  $warning: #faad14;
-  $error: #f5222d;
-  $default: $gray-light;
-  
-  .common-border {
-    border: 1px solid $gray-border;
-    border-right: none;
-    border-bottom: none;
-  }
-  
-  .drag-calendar {
-    padding-top: 1rem;
-    border: 1px solid $gray-light;
-    background-color: $white;
-    
-    button {
-      text-align: center;
-      vertical-align: middle;
-      cursor: pointer;
-      height: 32px;
-      padding: 0 15px;
-      font-size: 14px;
-      border: 1px solid $gray-light;
-      transition: color .2s linear, background-color .2s linear, border .2s linear, box-shadow .2s linear;
-      color: $black;
-      background-color: #fff;
-      outline: none;
-    }
-    
-    .btn-group {
-      display: flex;
-      
-      button {
-        &:hover {
-          background-color: $blue-light;
-        }
-        
-        &:first-child {
-          border-top-left-radius: 4px;
-          border-bottom-left-radius: 4px;
-        }
-        
-        &:last-child {
-          border-top-right-radius: 4px;
-          border-bottom-right-radius: 4px;
-        }
-      }
-    }
-    
-    .calendar-header {
-      display: flex;
-      justify-content: center;
-      
-      .title {
-        padding-right: 1rem;
-        font-size: 22px;
-      }
-      
-      .header-center {
-        display: flex;
-        align-items: center;
-      }
-    }
-    
-    .calendar-body {
-      margin-top: 1rem;
-      
-      .weeks {
-        display: flex;
-        height: 2rem;
-        @extend .common-border;
-        
-        .week {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-right: 1px solid $gray-border;
-          
-          &:last-child {
-            border-right: none;
-          }
-        }
-      }
-      
-      .dates {
-        .dates-bg {
-          
-          .weeks-row {
-            display: flex;
-          }
-          
-          .day-cell {
-            flex: 1;
-            min-height: 10rem;
-            background: $white;
-            @extend .common-border;
-            
-            &:hover {
-              background: $blue-light;
-              transition: background-color ease 200ms;
-            }
-            
-            .day-number {
-              text-align: right;
-              padding-right: 5px;
-              padding-top: 5px;
-              
-              span {
-                font-size: 18px;
-              }
-            }
-            
-            &:last-child {
-              border-right: none;
-            }
-          }
-          
-          .today {
-            color: red;
-            background: $blue-light;
-          }
-          
-          .not-current-month {
-            color: $gray-light;
-          }
-          
-          .current-month {
-          
-          }
-          
-          .next-month {
-          
-          }
-          
-          .previous-month {
-          
-          }
-          
-          .event {
-            display: block;
-            vertical-align: middle;
-            margin: 4px;
-            padding-left: 2px;
-            border-radius: 4px;
-            border: 1px solid transparent;
-            line-height: 1.5;
-            cursor: pointer;
-            color: $black;
-            
-            &:hover {
-              color: $blue;
-            }
-            
-            .badge {
-              display: inline-block;
-              position: relative;
-              top: -1px;
-              width: 6px;
-              height: 6px;
-              vertical-align: middle;
-              border-radius: 50%;
-              
-              &.success {
-                background-color: $success;
-              }
-              
-              &.warning {
-                background-color: $warning;
-              }
-              
-              &.error {
-                background-color: $error;
-              }
-              
-              &.default {
-                background-color: $default;
-              }
-              
-            }
-          }
-          
-        }
-      }
-      
-    }
-    
-  }
-</style>

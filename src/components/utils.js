@@ -23,25 +23,19 @@ export const formatDate = (time, format) => {
   }
 };
 
-export const getCurrentMonth = date => {
-  let currentDate = formatDate(momemt(new Date()), FORMAT_YEAR_MONTH);
-  let newDate = formatDate(momemt(date), FORMAT_YEAR_MONTH);
-  return [currentDate, newDate];
+export const isCurrentMonth = (currentMonth, date) => {
+  let newDateMonth = formatDate(momemt(date), FORMAT_YEAR_MONTH);
+  return currentMonth === newDateMonth;
 };
 
-export const isCurrentMonth = (date) => {
-  let [currentDate, newDate] = getCurrentMonth(date);
-  return currentDate === newDate;
+export const isPreviousMonth = (currentMonth, date) => {
+  let newDateMonth = formatDate(momemt(date), FORMAT_YEAR_MONTH);
+  return currentMonth > newDateMonth;
 };
 
-export const isPreviousMonth = date => {
-  let [currentDate, newDate] = getCurrentMonth(date);
-  return currentDate > newDate;
-};
-
-export const isNextMonth = date => {
-  let [currentDate, newDate] = getCurrentMonth(date);
-  return currentDate < newDate;
+export const isNextMonth = (currentMonth, date)=> {
+  let newDateMonth = formatDate(momemt(date), FORMAT_YEAR_MONTH);
+  return currentMonth < newDateMonth;
 };
 
 export const getCurrentDay = date => {

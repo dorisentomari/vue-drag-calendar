@@ -23,6 +23,7 @@
     
     <CalendarBody
       :current-month="currentMonth"
+      :locale="locale"
       :week-first-day="weekFirstDay"
       :enable-drag-drop="enableDragDrop"
       :events="events"
@@ -58,6 +59,10 @@
       enableDragDrop: {
         type: Boolean,
         default: false
+      },
+      everyDayMaxCount: {
+        type: Number,
+        default: constant.EVERY_DAY_MAX_COUNT
       }
     },
     data() {
@@ -91,6 +96,9 @@
       onClickDay (...args) {
         this.$emit('click-day', ...args);
       }
+    },
+    created () {
+      console.log('calendar component ', this.$props.locale);
     }
   };
 </script>

@@ -38,14 +38,23 @@
               <span>{{day.dayNumber}}</span>
             </div>
             <div class="events">
-               <span v-for="(event, idx) in day.events"
+               <span v-for="(event, idx) in day.events.slice(0, everyDayMaxCount)"
                      class="event"
                      :draggable="enableDragDrop"
                      :key="event.id || idx"
                >
                  <span class="badge"
-                       :class="[event.status ? event.status : 'default']"></span>
-                {{event.name}}
+                       :class="[event.status ? event.status : 'default']">
+                 </span>
+                 <span class="content">
+                   {{event.name}}
+                 </span>
+              </span>
+              <span v-if="day.events.length > everyDayMaxCount"
+                    class="event"
+                @click="handleShowMore(day)"
+              >
+                {{ showMoreTitle }}
               </span>
             </div>
           </div>
@@ -76,7 +85,12 @@
           {id: 'FRIDAY', value: 5, EN: 'FRIDAY', CN: '星期五'},
           {id: 'SATURDAY', value: 6, EN: 'SATURDAY', CN: '星期六'},
         ],
-        MONTH_VIEW_ALL_DAYS: 6 * 7
+        MONTH_VIEW_ALL_DAYS: 6 * 7,
+        showMoreTitle: '',
+        showMore: {
+          EN: 'show more',
+          CN: '查看更多'
+        }
       };
     },
     props: {
@@ -100,6 +114,10 @@
         type: Boolean,
         default: false
       },
+      everyDayMaxCount: {
+        type: Number,
+        default: constant.EVERY_DAY_MAX_COUNT
+      }
     },
     computed: {
       currentDaysList() {
@@ -122,7 +140,7 @@
         let _day = {};
         const events = this.$props.events;
         let eventsDateKeys = events.map(event => event.date);
-        console.log(eventsDateKeys);
+        
         let res = {};
         eventsDateKeys.forEach(date => {
           res[date] = events.filter(event => event.date === date);
@@ -130,13 +148,13 @@
         this.currentWeekDaysList.forEach(weeks => {
           let w = [];
           weeks.forEach(day => {
-            _day.isToday = isToday(day);
-            _day.isCurrentMonth = isCurrentMonth(day);
             _day.date = day;
             _day.dayNumber = day.substring(day.length - 2);
-            _day.isPreviousMonth = isPreviousMonth(day);
-            _day.isNextMonth = isNextMonth(day);
+            _day.isToday = isToday(day);
             _day.isSelected = false;
+            _day.isCurrentMonth = isCurrentMonth(this.currentMonth, day);
+            _day.isPreviousMonth = isPreviousMonth(this.currentMonth, day);
+            _day.isNextMonth = isNextMonth(this.currentMonth, day);
             _day.events = events.filter(event => event.date === day);
             w.push(_day);
             _day = {};
@@ -156,14 +174,14 @@
       getMonthViewDaysRange() {
         let date = moment(this.$props.currentMonth);
         let startDiffDays = this.getMonthViewStartDiffDays(date);
-        let firstDay = formatDate(date.add(-startDiffDays, 'days'),constant.FORMAT_YEAR_MONTH_DATE);
+        let firstDay = formatDate(date.add(-startDiffDays, 'days'), constant.FORMAT_YEAR_MONTH_DATE);
         let daysRange = [];
         for (let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
-          daysRange.push(formatDate(moment(firstDay).add(i, 'days'),constant.FORMAT_YEAR_MONTH_DATE));
+          daysRange.push(formatDate(moment(firstDay).add(i, 'days'), constant.FORMAT_YEAR_MONTH_DATE));
         }
         return daysRange;
       },
-      onClickDay (day, i) {
+      onClickDay(day, i) {
         this.$emit('click-day', day);
       },
       handleDragEvent() {
@@ -181,10 +199,15 @@
       onDropLeave(day, $event) {
       
       },
+      handleShowMore(day) {
+        // showMore 使用的时候，可以采用 UI 组件的 Modal 框，以展示更多的数据，或者做 AJAX 请求后再显示更多
+      }
     },
     created() {
       this.getMonthViewDaysRange();
-      let { locale, weekFirstDay } = this.$props;
+
+      let {locale, weekFirstDay} = this.$props;
+      
       switch (weekFirstDay) {
         case constant.WEEK_FIRST_DAY.MONDAY:
           this.weekListMap.push(this.weekSunday);
@@ -197,6 +220,7 @@
           break;
       }
       this.weekList = this.weekListMap.map(day => day[locale]);
+      this.showMoreTitle = this.showMore[locale];
     }
   };
 </script>

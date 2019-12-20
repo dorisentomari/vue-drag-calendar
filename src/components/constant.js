@@ -13,7 +13,7 @@ export default  {
     SUNDAY: 0,
     MONDAY: 1
   },
-  EVERY_DAY_MAX_NUMBER: 3,
+  EVERY_DAY_MAX_COUNT: 3,
   EVENT_STATUS: {
     SUCCESS: 'SUCCESS',
     WARNING: 'WARNING',

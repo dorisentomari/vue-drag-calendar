@@ -22,7 +22,7 @@ export default {
   data () {
     return {
       locale: constant.LOCALE.CN,
-      everyDayMaxNumber: constant.EVERY_DAY_MAX_NUMBER,
+      everyDayMaxCount: constant.EVERY_DAY_MAX_COUNT,
       enableDragDrop: true,
       events: [
         { id: 5, name: '测试05', date: '2019-12-04', startTime: '15:30', endTime: '18:00', status: 'success' },

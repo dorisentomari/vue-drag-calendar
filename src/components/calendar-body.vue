@@ -29,7 +29,7 @@
                   'clicked': day.isClicked
                  }
                "
-               @click.stop="onClickDay(day, week)"
+               @click.stop="onClickDay(day, week, i, currentWeeksDaysList)"
                @mouseenter="onMouseEnter(day, week, i, currentWeeksDaysList)"
                @mouseleave="onMouseLeave(day, week, i, currentWeeksDaysList)"
                @drop.stop="onDrop(day, $event)"
@@ -132,7 +132,7 @@
         deep: true,
         immediate: true,
         handler() {
-          return this.getCurrentWeeksDaysList();
+          return this.initCurrentDataList();
         }
       }
     },
@@ -208,33 +208,37 @@
         }
         return daysRange;
       },
-      onClickDay(currentDay, currentWeek) {
-        this.currentWeeksDaysList.map(weeks => {
-          return weeks.map(day => {
-            day.isClicked = false;
-            return day;
-          });
-        });
-        currentDay.isClicked = true;
-        this.$emit('on-click-day', currentDay, currentWeek);
-      },
-      onMouseEnter(currentDay, currentWeek, index, currentWeeksDaysList) {
-
+      selectCrossDays (currentDay, currentWeeksDaysList, fillColor = true) {
         for(let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
           let day = currentDay.index % this.ONE_WEEK_DAYS;
           if((i - day) % this.ONE_WEEK_DAYS === 0) {
             currentWeeksDaysList.map(week => {
               return week.map(day => {
                 if (i === day.index) {
-                  day.isSelected = true;
+                  day.isSelected = fillColor;
                 }
                 return day;
-              })
+              });
             });
           }
         }
+      },
+      onClickDay(currentDay, currentWeek, index, currentWeeksDaysList) {
+        this.currentWeeksDaysList.map(weeks => {
+          return weeks.map(day => {
+            day.isClicked = false;
+            return day;
+          });
+        });
         
-
+        this.selectCrossDays(currentDay, currentWeeksDaysList, true);
+        
+        currentDay.isClicked = true;
+        this.$emit('on-click-day', currentDay, currentWeek);
+      },
+      onMouseEnter(currentDay, currentWeek, index, currentWeeksDaysList) {
+        this.selectCrossDays(currentDay, currentWeeksDaysList, true);
+        
         currentWeek.map(day => {
           if (!day.isClicked) {
             day.isSelected = true;
@@ -243,19 +247,7 @@
         });
       },
       onMouseLeave(currentDay, currentWeek, index, currentWeeksDaysList) {
-        for(let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
-          let day = currentDay.index % this.ONE_WEEK_DAYS;
-          if((i - day) % this.ONE_WEEK_DAYS === 0) {
-            currentWeeksDaysList.map(week => {
-              return week.map(day => {
-                if (i === day.index) {
-                  day.isSelected = false;
-                }
-                return day;
-              })
-            });
-          }
-        }
+        this.selectCrossDays(currentDay, currentWeeksDaysList, false);
         
         currentWeek.map(day => {
           day.isSelected = false;

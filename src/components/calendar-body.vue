@@ -175,6 +175,7 @@
         return list;
       },
       getCurrentWeeksDaysList() {
+        const events = this.$props.events;
         return this.currentWeeksList.map((weeks, index) => {
           return weeks.map((day, i) => {
             let _day = day;
@@ -188,7 +189,7 @@
             day.isCurrentMonth = isCurrentMonth(this.currentMonth, _day);
             day.isPreviousMonth = isPreviousMonth(this.currentMonth, _day);
             day.isNextMonth = isNextMonth(this.currentMonth, _day);
-            day.events = [];
+            day.events = events.filter(event => event.date === _day);
             return day
           });
         });
@@ -232,13 +233,11 @@
         });
         
         this.selectCrossDays(currentDay, currentWeeksDaysList, true);
-        
         currentDay.isClicked = true;
         this.$emit('on-click-day', currentDay, currentWeek);
       },
       onMouseEnter(currentDay, currentWeek, index, currentWeeksDaysList) {
         this.selectCrossDays(currentDay, currentWeeksDaysList, true);
-        
         currentWeek.map(day => {
           if (!day.isClicked) {
             day.isSelected = true;
@@ -248,7 +247,6 @@
       },
       onMouseLeave(currentDay, currentWeek, index, currentWeeksDaysList) {
         this.selectCrossDays(currentDay, currentWeeksDaysList, false);
-        
         currentWeek.map(day => {
           day.isSelected = false;
           return day;

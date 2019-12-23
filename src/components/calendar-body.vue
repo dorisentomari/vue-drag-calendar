@@ -30,8 +30,8 @@
                  }
                "
                @click.stop="onClickDay(day, week)"
-               @mouseenter="onMouseEnter(day, week, currentWeeksDaysList)"
-               @mouseleave="onMouseLeave(day, week, currentWeeksDaysList)"
+               @mouseenter="onMouseEnter(day, week, i, currentWeeksDaysList)"
+               @mouseleave="onMouseLeave(day, week, i, currentWeeksDaysList)"
                @drop.stop="onDrop(day, $event)"
                @dropover.stop="onDropOver(day, $event)"
                @dropenter.stop="onDropEnter(day, $event)"
@@ -181,7 +181,7 @@
             day = {};
             day.index = index * this.ONE_WEEK_DAYS + i;
             day.date = _day;
-            day.dayNumber = _day.substring(_day.length - 2);
+            day.dayNumber = day.date.substring(_day.length - 2);
             day.isToday = isToday(_day);
             day.isSelected = false;
             day.isClicked = false;
@@ -218,7 +218,23 @@
         currentDay.isClicked = true;
         this.$emit('on-click-day', currentDay, currentWeek);
       },
-      onMouseEnter(currentDay, currentWeek) {
+      onMouseEnter(currentDay, currentWeek, index, currentWeeksDaysList) {
+
+        for(let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
+          let day = currentDay.index % this.ONE_WEEK_DAYS;
+          if((i - day) % this.ONE_WEEK_DAYS === 0) {
+            currentWeeksDaysList.map(week => {
+              return week.map(day => {
+                if (i === day.index) {
+                  day.isSelected = true;
+                }
+                return day;
+              })
+            });
+          }
+        }
+        
+
         currentWeek.map(day => {
           if (!day.isClicked) {
             day.isSelected = true;
@@ -226,7 +242,21 @@
           return day;
         });
       },
-      onMouseLeave(currentDay, currentWeek) {
+      onMouseLeave(currentDay, currentWeek, index, currentWeeksDaysList) {
+        for(let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
+          let day = currentDay.index % this.ONE_WEEK_DAYS;
+          if((i - day) % this.ONE_WEEK_DAYS === 0) {
+            currentWeeksDaysList.map(week => {
+              return week.map(day => {
+                if (i === day.index) {
+                  day.isSelected = false;
+                }
+                return day;
+              })
+            });
+          }
+        }
+        
         currentWeek.map(day => {
           day.isSelected = false;
           return day;

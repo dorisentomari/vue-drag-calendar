@@ -1,11 +1,11 @@
 {
-  "name": "vue-drag-calendar",
+  "name": "vue-calendar",
   "version": "0.1.0",
   "private": true,
   "author": "dawnight",
   "repository": {
     "type": "public",
-    "url": "https://github.com/dawnight/vue-drag-calendar.git"
+    "url": "https://github.com/dawnight/vue-calendar.git"
   },
   "scripts": {
     "serve": "vue-cli-service serve",

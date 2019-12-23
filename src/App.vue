@@ -5,6 +5,8 @@
               :locale="locale"
               :enable-drag-drop="enableDragDrop"
               :events="events"
+              @on-click-day="onClickDay"
+              @on-click-event="onClickEvent"
     >
     </Calendar>
   </div>
@@ -44,6 +46,10 @@ export default {
         { id: 17, name: '测试04', date: '2019-10-11', startTime: '15:30', endTime: '18:00', status: 'error' },
       ]
     };
+  },
+  methods: {
+    onClickDay(...args) {},
+    onClickEvent (...args) {}
   },
   created () {
   }

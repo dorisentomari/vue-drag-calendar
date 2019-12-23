@@ -13,26 +13,29 @@
       
       <div class="dates-bg">
         <div class="weeks-row"
-             v-for="(week, index) in currentDayEvents"
+             v-for="(week, index) in currentWeeksDaysList"
              :key="index"
         >
           <div class="day-cell"
                v-for="(day, i) in week"
+               :id="day.isToday ? 'today': ''"
                :key="i"
                :class="{
-                  today: day.isToday,
                   'current-month': day.isCurrentMonth,
                   'not-current-month': !day.isCurrentMonth,
                   'next-month': day.isNextMonth,
                   'previous-month': day.isPreviousMonth,
-                  selected: day.isSelected
+                  'selected': day.isSelected,
+                  'clicked': day.isClicked
                  }
                "
-               @click="onClickDay(day, i)"
-               @drop.prevent="onDrop(day, $event)"
-               @dropover.prevent="onDropOver(day, $event)"
-               @dropenter.prevent="onDropEnter(day, $event)"
-               @dropleave.prevent="onDropLeave(day, $event)"
+               @click.stop="onClickDay(day, week)"
+               @mouseenter="onMouseEnter(day, week, currentWeeksDaysList)"
+               @mouseleave="onMouseLeave(day, week, currentWeeksDaysList)"
+               @drop.stop="onDrop(day, $event)"
+               @dropover.stop="onDropOver(day, $event)"
+               @dropenter.stop="onDropEnter(day, $event)"
+               @dropleave.stop="onDropLeave(day, $event)"
           >
             <div class="day-number">
               <span>{{day.dayNumber}}</span>
@@ -42,6 +45,7 @@
                      class="event"
                      :draggable="enableDragDrop"
                      :key="event.id || idx"
+                     @click.stop="onClickEvent(event, day)"
                >
                  <span class="badge"
                        :class="[event.status ? event.status : 'default']">
@@ -52,7 +56,7 @@
               </span>
               <span v-if="day.events.length > everyDayMaxCount"
                     class="event"
-                @click="handleShowMore(day)"
+                    @click.stop="handleShowMore(day)"
               >
                 {{ showMoreTitle }}
               </span>
@@ -121,10 +125,10 @@
       }
     },
     computed: {
-      currentDaysList() {
+      currentDaysList () {
         return this.getMonthViewDaysRange();
       },
-      currentWeekDaysList() {
+      currentWeeksList() {
         let list = [];
         let weeks = [];
         for (let i = 0; i <= this.MONTH_VIEW_ALL_DAYS; i++) {
@@ -136,34 +140,34 @@
         }
         return list;
       },
-      currentDayEvents() {
-        let list = [];
-        let _day = {};
-        const events = this.$props.events;
-        let eventsDateKeys = events.map(event => event.date);
-        
-        let res = {};
-        eventsDateKeys.forEach(date => {
-          res[date] = events.filter(event => event.date === date);
-        });
-        this.currentWeekDaysList.forEach(weeks => {
-          let w = [];
-          weeks.forEach(day => {
-            _day.date = day;
-            _day.dayNumber = day.substring(day.length - 2);
-            _day.isToday = isToday(day);
-            _day.isSelected = false;
-            _day.isCurrentMonth = isCurrentMonth(this.currentMonth, day);
-            _day.isPreviousMonth = isPreviousMonth(this.currentMonth, day);
-            _day.isNextMonth = isNextMonth(this.currentMonth, day);
-            _day.events = events.filter(event => event.date === day);
-            w.push(_day);
-            _day = {};
+      currentWeeksDaysList () {
+        return this.currentWeeksList.map((weeks, index) => {
+          return weeks.map((day, i) => {
+            let _day = day;
+            day = {};
+            day.index = index * this.ONE_WEEK_DAYS + i;
+            day.date = _day;
+            day.dayNumber = _day.substring(_day.length - 2);
+            day.isToday = isToday(_day);
+            day.isSelected = false;
+            day.isClicked = false;
+            day.isCurrentMonth = isCurrentMonth(this.currentMonth, _day);
+            day.isPreviousMonth = isPreviousMonth(this.currentMonth, _day);
+            day.isNextMonth = isNextMonth(this.currentMonth, _day);
+            day.events = [];
+            return day
           });
-          list.push(w);
-          w = [];
         });
-        return list;
+      }
+    },
+    watch: {
+      currentWeeksDaysList: {
+        deep: true,
+        immediate: true,
+        handler(newValue, oldValue) {
+          console.log('newValue', newValue);
+          return newValue;
+        }
       }
     },
     methods: {
@@ -182,31 +186,49 @@
         }
         return daysRange;
       },
-      onClickDay(day, i) {
-        this.$emit('click-day', day);
+      onClickDay(currentDay, currentWeek) {
+        this.currentWeeksDaysList.map(weeks => {
+          return weeks.map(day => {
+            day.isClicked = false;
+            return day;
+          });
+        });
+        currentDay.isClicked = true;
+        this.$emit('on-click-day', currentDay, currentWeek);
       },
-      handleDragEvent() {
-        return this.$props.enableDragDrop;
+      onMouseEnter(currentDay, currentWeek) {
+        currentWeek.map(day => {
+          if (!day.isClicked) {
+            day.isSelected = true;
+          }
+          return day;
+        });
+      },
+      onMouseLeave(currentDay, currentWeek) {
+        currentWeek.map(day => {
+          if (!day.isClicked) {
+            day.isSelected = false;
+          }
+          return day;
+        });
+      },
+      onClickEvent(event, day) {
+        this.$emit('on-click-event', event, day);
       },
       onDrop(day, $event) {
-        this.handleDragEvent();
       },
       onDropOver(day, $event) {
-      
       },
       onDropEnter(day, $event) {
-      
       },
       onDropLeave(day, $event) {
-      
       },
       handleShowMore(day) {
         // showMore 使用的时候，可以采用 UI 组件的 Modal 框，以展示更多的数据，或者做 AJAX 请求后再显示更多
+        console.log('show more thing');
       }
     },
     created() {
-      this.getMonthViewDaysRange();
-
       let {locale, weekFirstDay} = this.$props;
       
       switch (weekFirstDay) {

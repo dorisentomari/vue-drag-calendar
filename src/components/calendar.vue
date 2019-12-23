@@ -1,9 +1,9 @@
 <template>
   <div class="drag-calendar">
     <CalendarHeader
-      @change-month="changeMonth"
-      @change-year="changeYear"
-      @current-month="changeCurrentMonth"
+      @on-change-month="changeMonth"
+      @on-change-year="changeYear"
+      @on-current-month="changeCurrentMonth"
       :current-month="currentMonth"
       :week-first-day="weekFirstDay"
     >
@@ -28,6 +28,7 @@
       :enable-drag-drop="enableDragDrop"
       :events="events"
       @on-click-day="onClickDay"
+      @on-click-event="onClickEvent"
     >
       <slot name="events"></slot>
     </CalendarBody>
@@ -95,7 +96,10 @@
         this.currentMonth = currentMonth;
       },
       onClickDay (...args) {
-        this.$emit('click-day', ...args);
+        this.$emit('on-click-day', ...args);
+      },
+      onClickEvent (...args) {
+        this.$emit('on-click-event', args);
       }
     }
   };

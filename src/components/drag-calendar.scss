@@ -39,6 +39,11 @@ $border-primary-color: $blue-info-color;
   border-bottom: none;
 }
 
+#today {
+  color: red;
+  background: $blue-info-color;
+}
+
 .drag-calendar {
   padding-top: 1rem;
   border: 1px solid $gray-light-color;
@@ -132,6 +137,14 @@ $border-primary-color: $blue-info-color;
             transition: background-color ease 200ms;
           }
 
+          &.selected {
+            background: $blue-light-color;
+          }
+
+          &.clicked {
+            background: $blue-info-color;
+          }
+
           .day-number {
             text-align: right;
             padding-right: 5px;
@@ -145,11 +158,6 @@ $border-primary-color: $blue-info-color;
           &:last-child {
             border-right: none;
           }
-        }
-
-        .today {
-          color: red;
-          background: $blue-light-color;
         }
 
         .not-current-month {

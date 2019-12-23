@@ -45,9 +45,9 @@
       return {
         prevTime: -1,
         nextTime: 1,
-        CHANGE_MONTH: 'change-month',
-        CHANGE_YEAR: 'change-year',
-        CURRENT_MONTH: 'current-month',
+        CHANGE_MONTH: 'on-change-month',
+        CHANGE_YEAR: 'on-change-year',
+        CURRENT_MONTH: 'on-current-month',
         keepCurrentMonth: keepCurrentMonth
       };
     },

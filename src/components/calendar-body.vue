@@ -77,27 +77,6 @@
   
   export default {
     name: 'calendar-body',
-    data() {
-      return {
-        weekList: [],
-        weekSunday: {id: 'SUNDAY', value: 7, EN: 'SUNDAY', CN: '星期日'},
-        weekListMap: [
-          {id: 'MONDAY', value: 1, EN: 'MONDAY', CN: '星期一'},
-          {id: 'TUESDAY', value: 2, EN: 'TUESDAY', CN: '星期二'},
-          {id: 'WEDNESDAY', value: 3, EN: 'WEDNESDAY', CN: '星期三'},
-          {id: 'THURSDAY', value: 4, EN: 'THURSDAY', CN: '星期四'},
-          {id: 'FRIDAY', value: 5, EN: 'FRIDAY', CN: '星期五'},
-          {id: 'SATURDAY', value: 6, EN: 'SATURDAY', CN: '星期六'},
-        ],
-        ONE_WEEK_DAYS: 7,
-        MONTH_VIEW_ALL_DAYS: 6 * 7,
-        showMoreTitle: '',
-        showMoreMap: {
-          EN: 'show more',
-          CN: '查看更多'
-        }
-      };
-    },
     props: {
       currentMonth: {
         type: String,
@@ -124,11 +103,66 @@
         default: constant.EVERY_DAY_MAX_COUNT
       }
     },
-    computed: {
-      currentDaysList () {
-        return this.getMonthViewDaysRange();
+    data() {
+      return {
+        weekList: [],
+        weekSunday: {id: 'SUNDAY', value: 7, EN: 'SUNDAY', CN: '星期日'},
+        weekListMap: [
+          {id: 'MONDAY', value: 1, EN: 'MONDAY', CN: '星期一'},
+          {id: 'TUESDAY', value: 2, EN: 'TUESDAY', CN: '星期二'},
+          {id: 'WEDNESDAY', value: 3, EN: 'WEDNESDAY', CN: '星期三'},
+          {id: 'THURSDAY', value: 4, EN: 'THURSDAY', CN: '星期四'},
+          {id: 'FRIDAY', value: 5, EN: 'FRIDAY', CN: '星期五'},
+          {id: 'SATURDAY', value: 6, EN: 'SATURDAY', CN: '星期六'},
+        ],
+        ONE_WEEK_DAYS: 7,
+        MONTH_VIEW_ALL_DAYS: 6 * 7,
+        showMoreTitle: '',
+        showMoreMap: {
+          EN: 'show more',
+          CN: '查看更多'
+        },
+        currentDaysList: [],
+        currentWeeksList: [],
+        currentWeeksDaysList: [],
+      };
+    },
+    watch: {
+      currentMonth: {
+        deep: true,
+        immediate: true,
+        handler() {
+          return this.getCurrentWeeksDaysList();
+        }
+      }
+    },
+    methods: {
+      initCurrentDataList() {
+        this.currentDaysList = this.getMonthViewDaysRange();
+        this.currentWeeksList = this.getCurrentWeeksList();
+        this.currentWeeksDaysList = this.getCurrentWeeksDaysList();
       },
-      currentWeeksList() {
+      initWeekFirstDay () {
+        let {locale, weekFirstDay} = this.$props;
+  
+        switch (weekFirstDay) {
+          case constant.WEEK_FIRST_DAY.MONDAY:
+            this.weekListMap.push(this.weekSunday);
+            break;
+          case constant.WEEK_FIRST_DAY.SUNDAY:
+            this.weekListMap.unshift(this.weekSunday);
+            break;
+          default:
+            this.weekListMap.push(this.weekSunday);
+            break;
+        }
+        this.weekList = this.weekListMap.map(day => day[locale]);
+      },
+      initShowMoreTitle () {
+        let {locale} = this.$props;
+        this.showMoreTitle = this.showMoreMap[locale];
+      },
+      getCurrentWeeksList() {
         let list = [];
         let weeks = [];
         for (let i = 0; i <= this.MONTH_VIEW_ALL_DAYS; i++) {
@@ -140,7 +174,7 @@
         }
         return list;
       },
-      currentWeeksDaysList () {
+      getCurrentWeeksDaysList() {
         return this.currentWeeksList.map((weeks, index) => {
           return weeks.map((day, i) => {
             let _day = day;
@@ -158,19 +192,7 @@
             return day
           });
         });
-      }
-    },
-    watch: {
-      currentWeeksDaysList: {
-        deep: true,
-        immediate: true,
-        handler(newValue, oldValue) {
-          console.log('newValue', newValue);
-          return newValue;
-        }
-      }
-    },
-    methods: {
+      },
       getMonthViewStartDiffDays(date) {
         let monthFirstDayWeek = date.day();
         monthFirstDayWeek = monthFirstDayWeek === 0 ? this.ONE_WEEK_DAYS : monthFirstDayWeek;
@@ -206,9 +228,7 @@
       },
       onMouseLeave(currentDay, currentWeek) {
         currentWeek.map(day => {
-          if (!day.isClicked) {
-            day.isSelected = false;
-          }
+          day.isSelected = false;
           return day;
         });
       },
@@ -229,21 +249,9 @@
       }
     },
     created() {
-      let {locale, weekFirstDay} = this.$props;
-      
-      switch (weekFirstDay) {
-        case constant.WEEK_FIRST_DAY.MONDAY:
-          this.weekListMap.push(this.weekSunday);
-          break;
-        case constant.WEEK_FIRST_DAY.SUNDAY:
-          this.weekListMap.unshift(this.weekSunday);
-          break;
-        default:
-          this.weekListMap.push(this.weekSunday);
-          break;
-      }
-      this.weekList = this.weekListMap.map(day => day[locale]);
-      this.showMoreTitle = this.showMoreMap[locale];
+      this.initCurrentDataList();
+      this.initWeekFirstDay();
+      this.initShowMoreTitle();
     }
   };
 </script>

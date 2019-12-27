@@ -25,11 +25,11 @@
 				eleDrag = null;
     for (let i = 0; i < lDrags; i += 1) {
         
-        eleDrags[i].onselectstart = function (ev) {
-            console.log('select start ev.target');
-            console.log(ev.target);
-            return false;
-        };
+        // eleDrags[i].onselectstart = function (ev) {
+        //     console.log('select start ev.target');
+        //     console.log(ev.target);
+        //     return false;
+        // };
         
         eleDrags[i].ondragstart = function (ev) {
             /*拖拽开始*/

@@ -25,7 +25,7 @@
       :current-month="currentMonth"
       :locale="locale"
       :week-first-day="weekFirstDay"
-      :enable-drag-drop="enableDragDrop"
+      :every-day-max-count="everyDayMaxCount"
       :events="events"
       @on-click-day="onClickDay"
       @on-click-event="onClickEvent"
@@ -52,25 +52,47 @@
     props: {
       locale: {
         type: String,
-        default: constant.LOCALE.CN
+        default: constant.LOCALE.CN,
+        validator(value) {
+          let { CN, EN } = constant.LOCALE;
+          if (value !== CN && value !== EN) {
+            console.error(`locale must be ${CN} or ${EN}，your data is ${value}`);
+            return false;
+          }
+          return true;
+        }
       },
       events: {
         type: Array,
         default: () => ([])
       },
-      enableDragDrop: {
-        type: Boolean,
-        default: false
-      },
       everyDayMaxCount: {
         type: Number,
-        default: constant.EVERY_DAY_MAX_COUNT
+        default: constant.EVERY_DAY_MAX_COUNT,
+        validator(value) {
+          if (value !== (value | 0) || value < 1) {
+            console.error(`everyDayMaxCount must be natural number，your data is ${value}`);
+            return false;
+          }
+          return true;
+        }
+      },
+      weekFirstDay: {
+        type: Number,
+        default: constant.WEEK_FIRST_DAY.DEFAULT,
+        validator(value) {
+          let { MONDAY, SUNDAY } = constant.WEEK_FIRST_DAY;
+          if (value !== MONDAY && value !== SUNDAY) {
+            console.error(`weekFirstDay must be ${MONDAY} or ${SUNDAY}，your data is ${value}`);
+            return false;
+          }
+          return true;
+        }
       }
     },
     data() {
       return {
-        currentMonth: currentMonth,
-        weekFirstDay: constant.WEEK_FIRST_DAY.SUNDAY
+        currentMonth: currentMonth
       };
     },
     components: {

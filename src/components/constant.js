@@ -11,7 +11,8 @@ export default  {
   },
   WEEK_FIRST_DAY: {
     SUNDAY: 0,
-    MONDAY: 1
+    MONDAY: 1,
+    DEFAULT: 1
   },
   EVERY_DAY_MAX_COUNT: 3,
   EVENT_STATUS: {

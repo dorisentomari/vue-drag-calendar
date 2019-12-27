@@ -32,10 +32,10 @@
                @click.stop="onClickDay(day, week, i, currentWeeksDaysList)"
                @mouseenter="onMouseEnter(day, week, i, currentWeeksDaysList)"
                @mouseleave="onMouseLeave(day, week, i, currentWeeksDaysList)"
-               @drop.stop="onDrop(day, $event)"
-               @dropover.stop="onDropOver(day, $event)"
-               @dropenter.stop="onDropEnter(day, $event)"
-               @dropleave.stop="onDropLeave(day, $event)"
+               @drop.stop="onTargetDrop(day, $event)"
+               @dropover.stop="onTargetDropOver(day, $event)"
+               @dropenter.stop="onTargetDropEnter(day, $event)"
+               @dropleave.stop="onTargetDropLeave(day, $event)"
           >
             <div class="day-number">
               <span>{{day.dayNumber}}</span>
@@ -43,9 +43,13 @@
             <div class="events">
                <span v-for="(event, idx) in day.events.slice(0, everyDayMaxCount)"
                      class="event"
-                     :draggable="enableDragDrop"
                      :key="event.id || idx"
+                     :draggable="Boolean(event.draggable)"
                      @click.stop="onClickEvent(event, day)"
+                     @dragstart="onFromDragStart(event, day, $event)"
+                     @dragend="onFromDragEnd(event, day, $event)"
+                     @dragenter="onFromDragEnter(event, day, $event)"
+                     @dragleave="onFromDragLeave(event, day, $event)"
                >
                  <span class="badge"
                        :class="[event.status ? event.status : 'default']">
@@ -82,25 +86,21 @@
         type: String,
         default: formatDate(new Date(), constant.FORMAT_YEAR_MONTH)
       },
-      weekFirstDay: {
-        type: Number,
-        default: constant.WEEK_FIRST_DAY.MONDAY
-      },
       locale: {
         type: String,
         default: constant.LOCALE.CN
+      },
+      everyDayMaxCount: {
+        type: Number,
+        default: constant.EVERY_DAY_MAX_COUNT
       },
       events: {
         type: Array,
         default: () => ([])
       },
-      enableDragDrop: {
-        type: Boolean,
-        default: false
-      },
-      everyDayMaxCount: {
+      weekFirstDay: {
         type: Number,
-        default: constant.EVERY_DAY_MAX_COUNT
+        default: constant.WEEK_FIRST_DAY.DEFAULT
       }
     },
     data() {
@@ -142,9 +142,9 @@
         this.currentWeeksList = this.getCurrentWeeksList();
         this.currentWeeksDaysList = this.getCurrentWeeksDaysList();
       },
-      initWeekFirstDay () {
+      initWeekFirstDay() {
         let {locale, weekFirstDay} = this.$props;
-  
+        
         switch (weekFirstDay) {
           case constant.WEEK_FIRST_DAY.MONDAY:
             this.weekListMap.push(this.weekSunday);
@@ -158,7 +158,7 @@
         }
         this.weekList = this.weekListMap.map(day => day[locale]);
       },
-      initShowMoreTitle () {
+      initShowMoreTitle() {
         let {locale} = this.$props;
         this.showMoreTitle = this.showMoreMap[locale];
       },
@@ -209,10 +209,10 @@
         }
         return daysRange;
       },
-      selectCrossDays (currentDay, currentWeeksDaysList, fillColor = true) {
-        for(let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
+      selectCrossDays(currentDay, currentWeeksDaysList, fillColor = true) {
+        for (let i = 0; i < this.MONTH_VIEW_ALL_DAYS; i++) {
           let day = currentDay.index % this.ONE_WEEK_DAYS;
-          if((i - day) % this.ONE_WEEK_DAYS === 0) {
+          if ((i - day) % this.ONE_WEEK_DAYS === 0) {
             currentWeeksDaysList.map(week => {
               return week.map(day => {
                 if (i === day.index) {
@@ -234,7 +234,8 @@
         
         this.selectCrossDays(currentDay, currentWeeksDaysList, true);
         currentDay.isClicked = true;
-        this.$emit('on-click-day', currentDay, currentWeek);
+        let date = currentDay.date;
+        this.$emit('on-click-day', moment(date));
       },
       onMouseEnter(currentDay, currentWeek, index, currentWeeksDaysList) {
         this.selectCrossDays(currentDay, currentWeeksDaysList, true);
@@ -253,25 +254,56 @@
         });
       },
       onClickEvent(event, day) {
-        this.$emit('on-click-event', event, day);
-      },
-      onDrop(day, $event) {
-      },
-      onDropOver(day, $event) {
-      },
-      onDropEnter(day, $event) {
-      },
-      onDropLeave(day, $event) {
+        let date = day.date;
+        this.$emit('on-click-event', event, moment(date));
       },
       handleShowMore(day) {
         // showMore 使用的时候，可以采用 UI 组件的 Modal 框，以展示更多的数据，或者做 AJAX 请求后再显示更多
-        console.log('show more thing');
+        console.log('show more thing', day);
+      },
+      onFromDragStart(event, day, $event) {
+        console.log('onFromDragStart', event, day, $event);
+        $event.target.style.background = 'red';
+      },
+      onFromDragEnd(event, day, $event) {
+        console.log('onFromDragEnd', event, day, $event);
+        $event.target.style.background = '';
+      },
+      onFromDragEnter(event, day, $event) {
+        console.log('onFromDragEnter', event, day, $event);
+      },
+      onFromDragLeave(event, day, $event) {
+        console.log('onFromDragLeave', event, day, $event);
+      },
+      onTargetDrop(day, $event) {
+        console.log('onTargetDrop', day, $event);
+        $event.preventDefault();
+      },
+      onTargetDropOver(day, $event) {
+        console.log('onTargetDropOver', day, $event);
+        $event.preventDefault();
+      },
+      onTargetDropEnter(day, $event) {
+        console.log('onTargetDropEnter', day, $event);
+        $event.preventDefault();
+      },
+      onTargetDropLeave(day, $event) {
+        console.log('onTargetDropLeave', day, $event);
+        $event.preventDefault();
       }
     },
     created() {
       this.initCurrentDataList();
       this.initWeekFirstDay();
       this.initShowMoreTitle();
+      
     }
   };
 </script>
+
+<style lang="scss">
+  .draghover {
+    border: 2px solid red;
+  }
+
+</style>
